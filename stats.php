@@ -68,8 +68,6 @@ $stmt = $pdo->query("
     SELECT p.fecha_prestamo, p.fecha_devolucion_real, 
            o.nombre as objeto_nombre, a.nombre as amigo_nombre
     FROM prestamos p
-           o.nombre as objeto_nombre, a.nombre as amigo_nombre
-    FROM prestamos p
     JOIN objetos o ON p.id_objeto = o.id
     JOIN amigos a ON p.id_amigo = a.id
     ORDER BY p.fecha_prestamo DESC

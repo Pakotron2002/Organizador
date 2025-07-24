@@ -1178,6 +1178,11 @@ body {
     text-align: center;
   }
 
+  .user-info {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
   .category-header {
     flex-direction: column;
     gap: 1rem;
@@ -1246,10 +1251,5 @@ body {
 
   .item-card-bg {
     height: 200px;
-  }
-
-  .user-info {
-    flex-wrap: wrap;
-    justify-content: center;
   }
 }

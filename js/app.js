@@ -178,21 +178,6 @@ function previewImage(input, previewId) {
 }
 
 // Función para debounce (útil para búsquedas)
-function debounce(func, wait, immediate) {
-  let timeout
-  return function executedFunction(...args) {
-    const later = () => {
-      timeout = null
-      if (!immediate) func(...args)
-    }
-    const callNow = immediate && !timeout
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-    if (callNow) func(...args)
-  }
-}
-
-// Función para hacer peticiones AJAX
 async function makeRequest(url, options = {}) {
   try {
     const response = await fetch(url, {

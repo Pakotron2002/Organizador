@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+require_once __DIR__ . '/../config.php';
 
 class Database {
     private $pdo;
@@ -57,8 +57,7 @@ class Database {
             foto_url TEXT,
             ubicacion_tipo TEXT NOT NULL DEFAULT 'archivador',
             ubicacion_id INTEGER NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (ubicacion_id) REFERENCES archivadores(id) ON DELETE CASCADE
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
         
         CREATE TABLE IF NOT EXISTS amigos (
@@ -73,7 +72,7 @@ class Database {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             id_objeto INTEGER NOT NULL,
             id_amigo INTEGER NOT NULL,
-            fecha_prestamo DATE NOT NULL,
+            fecha_prestamo DATE DEFAULT CURRENT_DATE,
             fecha_devolucion_esperada DATE,
             fecha_devolucion_real DATE,
             notas TEXT,
@@ -86,8 +85,4 @@ class Database {
         $this->pdo->exec($sql);
     }
 }
-
-// Crear instancia global
-$db = new Database();
-$pdo = $db->getConnection();
 ?>

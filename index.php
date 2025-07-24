@@ -14,10 +14,10 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'add_almacen') {
     
     // Procesar imagen si se subió
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
-        $foto = uploadImage($_FILES['foto']);
+        $foto = uploadAndProcessImage($_FILES['foto']);
     }
     
-    $stmt = $pdo->prepare("INSERT INTO almacenes (nombre, descripcion, foto) VALUES (?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO almacenes (nombre, descripcion, foto_url) VALUES (?, ?, ?)");
     if ($stmt->execute([$nombre, $descripcion, $foto])) {
         $success = "Almacén creado exitosamente";
     } else {
@@ -32,18 +32,18 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'edit_almacen') {
     $descripcion = trim($_POST['descripcion']);
     
     $almacen = getAlmacen($id);
-    $foto = $almacen['foto'];
+    $foto = $almacen['foto_url'];
     
     // Procesar nueva imagen si se subió
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
-        $new_foto = uploadImage($_FILES['foto']);
+        $new_foto = uploadAndProcessImage($_FILES['foto']);
         if ($new_foto) {
             deleteImage($foto); // Eliminar imagen anterior
             $foto = $new_foto;
         }
     }
     
-    $stmt = $pdo->prepare("UPDATE almacenes SET nombre = ?, descripcion = ?, foto = ? WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE almacenes SET nombre = ?, descripcion = ?, foto_url = ? WHERE id = ?");
     if ($stmt->execute([$nombre, $descripcion, $foto, $id])) {
         $success = "Almacén actualizado exitosamente";
     } else {
@@ -57,7 +57,7 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'delete_almacen') 
     $almacen = getAlmacen($id);
     
     if ($almacen) {
-        deleteImage($almacen['foto']);
+        deleteImage($almacen['foto_url']);
         $stmt = $pdo->prepare("DELETE FROM almacenes WHERE id = ?");
         if ($stmt->execute([$id])) {
             $success = "Almacén eliminado exitosamente";
@@ -169,7 +169,7 @@ $total_objetos = $stmt->fetch()['total'];
         <div class="items-grid">
             <?php foreach ($almacenes as $almacen): ?>
                 <div class="item-card-bg" 
-                     style="background-image: url('<?php echo $almacen['foto'] ? UPLOAD_URL . $almacen['foto'] : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0iI2FkYjViZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPjxpIGNsYXNzPSJmYXMgZmEtd2FyZWhvdXNlIj48L2k+PC90ZXh0Pjwvc3ZnPg=='; ?>')"
+                     style="background-image: url('<?php echo $almacen['foto_url'] ? UPLOAD_URL . $almacen['foto_url'] : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0iI2FkYjViZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPjxpIGNsYXNzPSJmYXMgZmEtd2FyZWhvdXNlIj48L2k+PC90ZXh0Pjwvc3ZnPg=='; ?>')"
                      onclick="location.href='almacen.php?id=<?php echo $almacen['id']; ?>'">
                     <div class="card-overlay">
                         <div class="card-actions">
@@ -286,7 +286,7 @@ $total_objetos = $stmt->fetch()['total'];
     </div>
 
     <script src="js/app.js"></script>
-    <script src="js/image-capture-v2.js"></script>
+    <script src="js/image-capture-unified.js"></script>
     <script>
         function editAlmacen(id, nombre, descripcion) {
             document.getElementById('edit_id').value = id;

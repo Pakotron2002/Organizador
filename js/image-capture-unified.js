@@ -1,5 +1,5 @@
-// Sistema de captura y edición de imágenes con editor 1:1
-class ImageCaptureV2 {
+// Sistema unificado de captura y edición de imágenes
+class ImageCaptureUnified {
   constructor() {
     this.canvas = null
     this.ctx = null
@@ -22,96 +22,96 @@ class ImageCaptureV2 {
 
   initializeModal() {
     // Crear modal de edición de imagen si no existe
-    if (!document.getElementById("imageEditModalV2")) {
+    if (!document.getElementById("imageEditModal")) {
       const modalHTML = `
-                <div class="modal" id="imageEditModalV2">
-                    <div class="modal-content" style="max-width: 900px; width: 95%;">
-                        <div class="modal-header">
-                            <h3><i class="fas fa-crop"></i> Editor de Imagen</h3>
-                            <span class="close" onclick="window.imageCapture.closeEditor()">&times;</span>
-                        </div>
-                        <div class="modal-body" style="padding: 0;">
-                            <div style="display: flex; min-height: 500px;">
-                                <!-- Panel de edición -->
-                                <div style="flex: 2; padding: 1rem; border-right: 1px solid #eee;">
-                                    <div class="editor-toolbar" style="margin-bottom: 1rem; text-align: center;">
-                                        <div style="display: inline-flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.imageCapture.resetCrop()">
-                                                🔄 Reiniciar
-                                            </button>
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.imageCapture.centerCrop()">
-                                                🎯 Centrar
-                                            </button>
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.imageCapture.fitCrop()">
-                                                📐 Ajustar
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted" id="cropSizeInfo">Selecciona un área cuadrada</small>
-                                        </div>
-                                    </div>
-                                    <div class="canvas-wrapper" style="position: relative; display: inline-block; border: 2px solid #ddd; border-radius: 8px; overflow: hidden;">
-                                        <canvas id="imageEditCanvasV2" style="display: block;"></canvas>
-                                        <div class="crop-overlay" id="cropOverlay" style="position: absolute; top: 0; left: 0; pointer-events: none;">
-                                            <div class="crop-selection" id="cropSelection" style="position: absolute; border: 2px solid #007bff; background: rgba(0, 123, 255, 0.1); cursor: move; pointer-events: all;">
-                                                <div class="crop-handle nw" data-handle="nw" style="position: absolute; top: -5px; left: -5px; width: 10px; height: 10px; background: #007bff; cursor: nw-resize; pointer-events: all;"></div>
-                                                <div class="crop-handle ne" data-handle="ne" style="position: absolute; top: -5px; right: -5px; width: 10px; height: 10px; background: #007bff; cursor: ne-resize; pointer-events: all;"></div>
-                                                <div class="crop-handle sw" data-handle="sw" style="position: absolute; bottom: -5px; left: -5px; width: 10px; height: 10px; background: #007bff; cursor: sw-resize; pointer-events: all;"></div>
-                                                <div class="crop-handle se" data-handle="se" style="position: absolute; bottom: -5px; right: -5px; width: 10px; height: 10px; background: #007bff; cursor: se-resize; pointer-events: all;"></div>
-                                                <div class="crop-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #007bff; pointer-events: none;">
-                                                    <i class="fas fa-arrows-alt"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Panel de preview -->
-                                <div style="flex: 1; padding: 1rem; background: #f8f9fa;">
-                                    <div class="preview-header" style="text-align: center; margin-bottom: 1rem;">
-                                        <h4>👁️ Vista Previa</h4>
-                                        <small class="text-muted">Resultado final (400x400px)</small>
-                                    </div>
-                                    <div class="preview-container" style="text-align: center; margin-bottom: 1rem;">
-                                        <canvas id="previewCanvasV2" width="200" height="200" style="border: 2px solid #ddd; border-radius: 8px; background: white;"></canvas>
-                                    </div>
-                                    <div class="preview-info" style="text-align: center;">
-                                        <div style="display: flex; justify-content: space-around;">
-                                            <div>
-                                                <div style="font-size: 1.2rem; font-weight: bold; color: #007bff;" id="previewWidth">400</div>
-                                                <div style="font-size: 0.8rem; color: #666;">Ancho</div>
-                                            </div>
-                                            <div>
-                                                <div style="font-size: 1.2rem; font-weight: bold; color: #007bff;" id="previewHeight">400</div>
-                                                <div style="font-size: 0.8rem; color: #666;">Alto</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div style="flex: 1; text-align: left;">
-                                <small class="text-muted">
-                                    💡 Arrastra para mover • Usa las esquinas para redimensionar
-                                </small>
-                            </div>
-                            <button type="button" class="btn btn-secondary" onclick="window.imageCapture.closeEditor()">
-                                ❌ Cancelar
-                            </button>
-                            <button type="button" class="btn btn-primary" onclick="window.imageCapture.cropAndSave()">
-                                ✅ Usar Imagen
-                            </button>
-                        </div>
+        <div class="modal" id="imageEditModal">
+          <div class="modal-content" style="max-width: 900px; width: 95%;">
+            <div class="modal-header">
+              <h3><i class="fas fa-crop"></i> Editor de Imagen</h3>
+              <span class="close" onclick="window.imageCapture.closeEditor()">&times;</span>
+            </div>
+            <div class="modal-body" style="padding: 0;">
+              <div style="display: flex; min-height: 500px;">
+                <!-- Panel de edición -->
+                <div style="flex: 2; padding: 1rem; border-right: 1px solid #eee;">
+                  <div class="editor-toolbar" style="margin-bottom: 1rem; text-align: center;">
+                    <div style="display: inline-flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                      <button type="button" class="btn btn-secondary btn-sm" onclick="window.imageCapture.resetCrop()">
+                        🔄 Reiniciar
+                      </button>
+                      <button type="button" class="btn btn-secondary btn-sm" onclick="window.imageCapture.centerCrop()">
+                        🎯 Centrar
+                      </button>
+                      <button type="button" class="btn btn-secondary btn-sm" onclick="window.imageCapture.fitCrop()">
+                        📐 Ajustar
+                      </button>
                     </div>
+                    <div>
+                      <small class="text-muted" id="cropSizeInfo">Selecciona un área cuadrada</small>
+                    </div>
+                  </div>
+                  <div class="canvas-wrapper" style="position: relative; display: inline-block; border: 2px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <canvas id="imageEditCanvas" style="display: block;"></canvas>
+                    <div class="crop-overlay" id="cropOverlay" style="position: absolute; top: 0; left: 0; pointer-events: none;">
+                      <div class="crop-selection" id="cropSelection" style="position: absolute; border: 2px solid #007bff; background: rgba(0, 123, 255, 0.1); cursor: move; pointer-events: all;">
+                        <div class="crop-handle nw" data-handle="nw" style="position: absolute; top: -5px; left: -5px; width: 10px; height: 10px; background: #007bff; cursor: nw-resize; pointer-events: all;"></div>
+                        <div class="crop-handle ne" data-handle="ne" style="position: absolute; top: -5px; right: -5px; width: 10px; height: 10px; background: #007bff; cursor: ne-resize; pointer-events: all;"></div>
+                        <div class="crop-handle sw" data-handle="sw" style="position: absolute; bottom: -5px; left: -5px; width: 10px; height: 10px; background: #007bff; cursor: sw-resize; pointer-events: all;"></div>
+                        <div class="crop-handle se" data-handle="se" style="position: absolute; bottom: -5px; right: -5px; width: 10px; height: 10px; background: #007bff; cursor: se-resize; pointer-events: all;"></div>
+                        <div class="crop-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #007bff; pointer-events: none;">
+                          <i class="fas fa-arrows-alt"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            `
+                
+                <!-- Panel de preview -->
+                <div style="flex: 1; padding: 1rem; background: #f8f9fa;">
+                  <div class="preview-header" style="text-align: center; margin-bottom: 1rem;">
+                    <h4>👁️ Vista Previa</h4>
+                    <small class="text-muted">Resultado final (400x400px)</small>
+                  </div>
+                  <div class="preview-container" style="text-align: center; margin-bottom: 1rem;">
+                    <canvas id="previewCanvas" width="200" height="200" style="border: 2px solid #ddd; border-radius: 8px; background: white;"></canvas>
+                  </div>
+                  <div class="preview-info" style="text-align: center;">
+                    <div style="display: flex; justify-content: space-around;">
+                      <div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #007bff;" id="previewWidth">400</div>
+                        <div style="font-size: 0.8rem; color: #666;">Ancho</div>
+                      </div>
+                      <div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #007bff;" id="previewHeight">400</div>
+                        <div style="font-size: 0.8rem; color: #666;">Alto</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div style="flex: 1; text-align: left;">
+                <small class="text-muted">
+                  💡 Arrastra para mover • Usa las esquinas para redimensionar
+                </small>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="window.imageCapture.closeEditor()">
+                ❌ Cancelar
+              </button>
+              <button type="button" class="btn btn-primary" onclick="window.imageCapture.cropAndSave()">
+                ✅ Usar Imagen
+              </button>
+            </div>
+          </div>
+        </div>
+      `
       document.body.insertAdjacentHTML("beforeend", modalHTML)
     }
 
-    this.canvas = document.getElementById("imageEditCanvasV2")
+    this.canvas = document.getElementById("imageEditCanvas")
     this.ctx = this.canvas.getContext("2d")
-    this.previewCanvas = document.getElementById("previewCanvasV2")
+    this.previewCanvas = document.getElementById("previewCanvas")
     this.previewCtx = this.previewCanvas.getContext("2d")
 
     this.cropOverlay = document.getElementById("cropOverlay")
@@ -150,11 +150,11 @@ class ImageCaptureV2 {
 
       // Crear modal de cámara
       this.createCameraModal()
-      this.video = document.getElementById("cameraVideoV2")
+      this.video = document.getElementById("cameraVideo")
       this.video.srcObject = this.stream
       this.video.play()
 
-      window.openModal("cameraModalV2")
+      openModal("cameraModal")
     } catch (error) {
       console.error("Error al acceder a la cámara:", error)
       alert("No se pudo acceder a la cámara. Por favor, usa el selector de archivos.")
@@ -162,34 +162,34 @@ class ImageCaptureV2 {
   }
 
   createCameraModal() {
-    if (!document.getElementById("cameraModalV2")) {
+    if (!document.getElementById("cameraModal")) {
       const modalHTML = `
-                <div class="modal" id="cameraModalV2">
-                    <div class="modal-content" style="max-width: 600px;">
-                        <div class="modal-header">
-                            <h3><i class="fas fa-camera"></i> Capturar Foto</h3>
-                            <span class="close" onclick="window.imageCapture.closeCameraModal()">&times;</span>
-                        </div>
-                        <div class="modal-body" style="text-align: center;">
-                            <video id="cameraVideoV2" autoplay style="width: 100%; max-width: 500px; border-radius: 8px; margin-bottom: 1rem;"></video>
-                            <div>
-                                <button type="button" class="btn btn-primary" onclick="window.imageCapture.takePicture()">
-                                    <i class="fas fa-camera"></i> Tomar Foto
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="window.imageCapture.closeCameraModal()">
-                                    <i class="fas fa-times"></i> Cancelar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `
+        <div class="modal" id="cameraModal">
+          <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+              <h3><i class="fas fa-camera"></i> Capturar Foto</h3>
+              <span class="close" onclick="window.imageCapture.closeCameraModal()">&times;</span>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+              <video id="cameraVideo" autoplay style="width: 100%; max-width: 500px; border-radius: 8px; margin-bottom: 1rem;"></video>
+              <div>
+                <button type="button" class="btn btn-primary" onclick="window.imageCapture.takePicture()">
+                  <i class="fas fa-camera"></i> Tomar Foto
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.imageCapture.closeCameraModal()">
+                  <i class="fas fa-times"></i> Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
       document.body.insertAdjacentHTML("beforeend", modalHTML)
     }
   }
 
   takePicture() {
-    const video = document.getElementById("cameraVideoV2")
+    const video = document.getElementById("cameraVideo")
     const canvas = document.createElement("canvas")
     const ctx = canvas.getContext("2d")
 
@@ -212,7 +212,7 @@ class ImageCaptureV2 {
       this.stream.getTracks().forEach((track) => track.stop())
       this.stream = null
     }
-    window.closeModal("cameraModalV2")
+    closeModal("cameraModal")
   }
 
   openEditor(imageBlob) {
@@ -222,7 +222,7 @@ class ImageCaptureV2 {
       this.setupCanvas()
       this.initializeCrop()
       this.updatePreview()
-      window.openModal("imageEditModalV2")
+      openModal("imageEditModal")
     }
     img.src = URL.createObjectURL(imageBlob)
   }
@@ -487,7 +487,7 @@ class ImageCaptureV2 {
   }
 
   closeEditor() {
-    window.closeModal("imageEditModalV2")
+    closeModal("imageEditModal")
     this.currentImage = null
     this.currentInputId = null
     this.callback = null
@@ -495,7 +495,7 @@ class ImageCaptureV2 {
 }
 
 // Crear instancia global
-window.imageCapture = new ImageCaptureV2()
+window.imageCapture = new ImageCaptureUnified()
 
 // Función global para capturar imagen
 function captureImage(inputId, callback) {
@@ -511,21 +511,6 @@ function handleFileSelect(inputId) {
       window.imageCapture.currentInputId = inputId
       window.imageCapture.openEditor(file)
     }
-  }
-}
-
-// Funciones globales para abrir y cerrar modales
-window.openModal = (modalId) => {
-  const modal = document.getElementById(modalId)
-  if (modal) {
-    modal.style.display = "block"
-  }
-}
-
-window.closeModal = (modalId) => {
-  const modal = document.getElementById(modalId)
-  if (modal) {
-    modal.style.display = "none"
   }
 }
 
